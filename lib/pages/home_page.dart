@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage>
         );
       },
       child: const Icon(
-        Icons.star,
+        Icons.star_border,
         size: 100,
         color: Colors.white,
       ),
