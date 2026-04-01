@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key}); // ✅ FIX 1: add key constructor
+
   @override
-  State<StatefulWidget> createState() {
-    return _HomePageState();
-  }
+  State<HomePage> createState() => _HomePageState(); // cleaner syntax
 }
 
 class _HomePageState extends State<HomePage>
@@ -21,36 +21,35 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _starIconAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(
-        seconds: 4,
-      ),
+      duration: const Duration(seconds: 4), // ✅ const added
     );
-    // _starIconAnimationController!.forward();
     _starIconAnimationController!.repeat();
+  }
+
+  @override
+  void dispose() {
+    _starIconAnimationController?.dispose(); // ✅ BEST PRACTICE (important)
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            _pageBackground(),
-            Column(
-              // MainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              // MainAxisSize: MainAxisSize.max,
-              // CrossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _circularAnimationButton(),
-                _starIcon(),
-              ],
-            ),
-          ],
-        ),
+      body: Stack(
+        // ✅ FIX 2: removed unnecessary Container
+        clipBehavior: Clip.none,
+        children: [
+          _pageBackground(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _circularAnimationButton(),
+              _starIcon(),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -59,11 +58,12 @@ class _HomePageState extends State<HomePage>
     return TweenAnimationBuilder(
       tween: _backgroundScale,
       curve: Curves.easeInOutCubicEmphasized,
-      duration: Duration(seconds: 5),
-      builder: (_context, double _scale, _child) {
+      duration: const Duration(seconds: 5),
+      builder: (context, scale, child) {
+        // ✅ FIX 3: removed _
         return Transform.scale(
-          scale: _scale,
-          child: _child,
+          scale: scale,
+          child: child,
         );
       },
       child: Container(
@@ -92,9 +92,7 @@ class _HomePageState extends State<HomePage>
           child: const Center(
             child: Text(
               "Basic",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -105,10 +103,11 @@ class _HomePageState extends State<HomePage>
   Widget _starIcon() {
     return AnimatedBuilder(
       animation: _starIconAnimationController!.view,
-      builder: (_buildContext, _child) {
+      builder: (context, child) {
+        // ✅ FIX 3 again
         return Transform.rotate(
           angle: _starIconAnimationController!.value * 2 * pi,
-          child: _child,
+          child: child,
         );
       },
       child: const Icon(
