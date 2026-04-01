@@ -21,14 +21,14 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _starIconAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4), // ✅ const added
+      duration: const Duration(seconds: 4),
     );
     _starIconAnimationController!.repeat();
   }
 
   @override
   void dispose() {
-    _starIconAnimationController?.dispose(); // ✅ BEST PRACTICE (important)
+    _starIconAnimationController?.dispose();
     super.dispose();
   }
 
@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        // ✅ FIX 2: removed unnecessary Container
         clipBehavior: Clip.none,
         children: [
           _pageBackground(),
@@ -60,7 +59,6 @@ class _HomePageState extends State<HomePage>
       curve: Curves.easeInOutCubicEmphasized,
       duration: const Duration(seconds: 5),
       builder: (context, scale, child) {
-        // ✅ FIX 3: removed _
         return Transform.scale(
           scale: scale,
           child: child,
@@ -104,7 +102,6 @@ class _HomePageState extends State<HomePage>
     return AnimatedBuilder(
       animation: _starIconAnimationController!.view,
       builder: (context, child) {
-        // ✅ FIX 3 again
         return Transform.rotate(
           angle: _starIconAnimationController!.value * 2 * pi,
           child: child,

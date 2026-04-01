@@ -11,20 +11,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:animdo/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('HomePage UI test', (WidgetTester tester) async {
+    // Build app
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Check "Basic" text exists
+    expect(find.text('Basic'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    //  Check star icon exists
+    expect(find.byIcon(Icons.star_border), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Button tap animation test', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    // Find the animated container (your button)
+    final button = find.text('Basic');
+
+    expect(button, findsOneWidget);
+
+    // Tap the button
+    await tester.tap(button);
+    await tester.pump(); // trigger rebuild
+
+    // No crash = test passed (basic interaction test)
   });
 }
